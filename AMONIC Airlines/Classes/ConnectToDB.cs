@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AMONIC_Airlines.Classes
 {
@@ -11,8 +12,51 @@ namespace AMONIC_Airlines.Classes
     {
         public string ConnectionString { get; set; } = @"Persist Security Info=False;User ID=Last;Password=123123;Initial Catalog=Delfin;Data Source=LAPTOP-DOAF05I7";
 
+        public void AddUser(User user)
+        {
+              if (CheckIfEmailIsNew(user.Email))
+                {
+                    string command = "USE Session1_12 " + $"EXEC [dbo].AddUser '{user.RoleID}','{user.Email}', '{user.Password}', '{user.FirstName}', '{user.LastName}', '{user.OfficeID}', '{user.Birthdate}', '{user.Active}'";
+                    using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
+                    {
+                        conn.Open();
+                        SqlCommand command1 = new SqlCommand(command, conn);
+                        command1.ExecuteScalar();
+                        conn.Close();
+                    }
+                    MessageBox.Show("Пользователь добавлен");
+                }
+                else
+                {
+                    MessageBox.Show("Пользователь с такой почтой уже существует");
+                }
+            
+        }
 
-        
+
+        private bool CheckIfEmailIsNew(string email)
+        {
+            string command = "USE Session1_12 " + $"select* from Users WHERE Email = '{email}'"; //для многого where пишешь ещё AND и после название переменной = '{переменная}'
+            List<User> users = new List<User>();
+            using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlDataReader reader = new SqlCommand(command, conn).ExecuteReader();
+                while (reader.Read())
+                {
+                    User user = new User();
+                    user.ID = reader.GetInt32(0);
+                    users.Add(user);
+                }
+                reader.Close();
+                conn.Close();
+            }
+            if (users.Count != 0)
+                return false;
+            else
+                return true;
+        }
+
         public List<User> GetUser()
         {
             // try
@@ -135,6 +179,20 @@ namespace AMONIC_Airlines.Classes
         }
 
         public void ChangeActive(User user)
+        {
+
+            string command = "USE Session1_12 " + $"EXEC [dbo].EditUser '{user.RoleID}','{user.Email}', '{user.Password}', '{user.FirstName}', '{user.LastName}', '{user.OfficeID}', '{user.Birthdate}', '{user.Active}', {user.ID}";
+            using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlCommand command1 = new SqlCommand(command, conn);
+                command1.ExecuteScalar();
+                conn.Close();
+            }
+
+        }
+
+        public void ChangeRole(User user)
         {
 
             string command = "USE Session1_12 " + $"EXEC [dbo].EditUser '{user.RoleID}','{user.Email}', '{user.Password}', '{user.FirstName}', '{user.LastName}', '{user.OfficeID}', '{user.Birthdate}', '{user.Active}', {user.ID}";

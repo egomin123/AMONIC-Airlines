@@ -9,6 +9,12 @@
       Title="UserPage" Height="350" Width="480">
 
     <Grid Background="#FFFACB">
-   
+        <Menu Background="#F79420"  HorizontalAlignment="Left" Height="35" Margin="0,2,0,0" VerticalAlignment="Top" Width="475">
+            <Button Content="Exit" Background="#196AA6" Foreground="White"  BorderBrush="#196AA6"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="85" Height="25" Click="Button_Click"/>
+
+        </Menu>
+        <Label Name="Hello" Content="Label" HorizontalAlignment="Left" Margin="34,53,0,0" VerticalAlignment="Top"/>
+        <TextBlock Name="TimeInSystem" HorizontalAlignment="Left" Margin="118,82,0,0" TextWrapping="Wrap" Text="Time spent on system: 0:0:0" VerticalAlignment="Top" Width="172"/>
+        <TextBlock Name="HowMuchCrash" HorizontalAlignment="Left" Margin="330,80,0,0" TextWrapping="Wrap" Text="Number of crashes:   0" VerticalAlignment="Top" Width="134"/>
     </Grid>
 </Page>

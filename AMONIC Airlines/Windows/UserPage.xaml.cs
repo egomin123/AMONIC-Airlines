@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AMONIC_Airlines.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AMONIC_Airlines.Windows
 {
@@ -20,9 +22,41 @@ namespace AMONIC_Airlines.Windows
     /// </summary>
     public partial class UserPage : Page
     {
-        public UserPage()
+        User user;
+        DispatcherTimer reklama = new DispatcherTimer();
+        public UserPage(User user1)
         {
             InitializeComponent();
+            reklama.Interval = TimeSpan.FromSeconds(1);
+            reklama.Tick += Reklama_Tick;
+            reklama.Start();
+            user = user1;
+            Hello.Content = ("Hi " + user.FirstName + ", Welcome to AMONIC Airlines.");
+        }
+        int Seconds = 0;
+        int Minute = 0;
+        int Hour = 0;
+        private void Reklama_Tick(object sender, EventArgs e)
+        {
+            Seconds +=  1;
+            if (Minute == 59 && Seconds == 60)
+            {
+                Hour++;
+                Minute = 0;
+                Seconds = 0;
+            }
+            if ( Seconds == 60)
+            {
+                Minute++;
+                Seconds = 0;
+            }
+            
+            TimeInSystem.Text =("Time spent on system: " + Convert.ToString(Hour) + ":" + Convert.ToString(Minute) + ":" + Convert.ToString(Seconds));
+
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(1);
         }
     }
 }

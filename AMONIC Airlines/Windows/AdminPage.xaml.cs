@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -35,8 +36,9 @@ namespace AMONIC_Airlines.Windows
 
             Users = new ConnectToDB().GetUser();
             MetricsDataGrid.ItemsSource = Users;
+          
         }
-
+     
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Environment.Exit(1);
@@ -62,7 +64,8 @@ namespace AMONIC_Airlines.Windows
         List<User> users = new List<User>();
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+           
+            NavigationService.Navigate(new AddUser());
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -83,6 +86,21 @@ namespace AMONIC_Airlines.Windows
                 user1.Active = true;
             new ConnectToDB().ChangeActive(user1);
             filldata();
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            User user1 = new User();
+            user1.ID = Users[MetricsDataGrid.SelectedIndex].ID;
+            user1.RoleID = Users[MetricsDataGrid.SelectedIndex].RoleID;
+            user1.Email = Users[MetricsDataGrid.SelectedIndex].Email;
+            user1.Password = Users[MetricsDataGrid.SelectedIndex].Password;
+            user1.FirstName = Users[MetricsDataGrid.SelectedIndex].FirstName;
+            user1.LastName = Users[MetricsDataGrid.SelectedIndex].LastName;
+            user1.OfficeID = Users[MetricsDataGrid.SelectedIndex].OfficeID;
+            user1.Birthdate = Users[MetricsDataGrid.SelectedIndex].Birthdate;
+            user1.Active = Users[MetricsDataGrid.SelectedIndex].Active;
+            NavigationService.Navigate(new ChangeRole(user1));
         }
     }
 }

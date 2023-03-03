@@ -82,7 +82,7 @@ namespace AMONIC_Airlines.Windows
                                     if (users1.RoleID == 2)
                                     {
 
-                                    NavigationService.Navigate(new UserPage());
+                                    NavigationService.Navigate(new UserPage(users1));
                                         TryForLogin = 0;
                                     }
                                     else if (users1.RoleID == 1)
