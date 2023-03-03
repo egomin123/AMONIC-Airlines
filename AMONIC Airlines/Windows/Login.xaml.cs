@@ -28,7 +28,7 @@ namespace AMONIC_Airlines.Windows
             InitializeComponent();
             reklama.Interval = TimeSpan.FromSeconds(1);
             reklama.Tick += Reklama_Tick;
-            login.Text = Convert.ToString(DateTime.Now);
+            login.Text = "j.doe@amonic.com";
            
         }
 

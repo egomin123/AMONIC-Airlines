@@ -36,14 +36,60 @@ namespace AMONIC_Airlines.Classes
                     user.Birthdate = reader.GetDateTime(7);
                     user.Active = reader.GetBoolean(8);
                     if (user.RoleID == 1) user.Role = "administrator";
+                    else if (user.RoleID == 2) user.Role = "office user";
                     if (user.OfficeID == 1) user.Office = "Abu dhabi";
                     else if (user.OfficeID == 3) user.Office = "Cairo";
                     else if (user.OfficeID == 4) user.Office = "Bahrain";
                     else if (user.OfficeID == 5) user.Office = "Doha";
                     else if (user.OfficeID == 6) user.Office = "Riyadh";
 
-                    user.age = Convert.ToString(DateTime.Now - user.Birthdate);
                     
+                    users.Add(user);
+                }
+                reader.Close();
+                conn.Close();
+                return users;
+            }
+            //}
+            //catch
+            //{
+            //    List<User> users = new List<User>();
+            //    return users;
+            //}
+        }
+        
+
+        public List<User> GetUserWithOffice(int IDOffice)
+        {
+            // try
+            // {
+            string command = "USE Session1_12 " + $"select* from Users Where OfficeID = {IDOffice}"; //для многого where пишешь ещё AND и после название переменной = '{переменная}'
+            List<User> users = new List<User>();
+            using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlDataReader reader = new SqlCommand(command, conn).ExecuteReader();
+                while (reader.Read())
+                {
+                    User user = new User();
+                    user.ID = reader.GetInt32(0);
+                    user.RoleID = reader.GetInt32(1);
+                    user.Email = reader.GetString(2);
+                    user.Password = reader.GetString(3);
+                    user.FirstName = reader.GetString(4);
+                    user.LastName = reader.GetString(5);
+                    user.OfficeID = reader.GetInt32(6);
+                    user.Birthdate = reader.GetDateTime(7);
+                    user.Active = reader.GetBoolean(8);
+                    if (user.RoleID == 1) user.Role = "administrator";
+                    else if (user.RoleID == 2) user.Role = "office user";
+                    if (user.OfficeID == 1) user.Office = "Abu dhabi";
+                    else if (user.OfficeID == 3) user.Office = "Cairo";
+                    else if (user.OfficeID == 4) user.Office = "Bahrain";
+                    else if (user.OfficeID == 5) user.Office = "Doha";
+                    else if (user.OfficeID == 6) user.Office = "Riyadh";
+
+
                     users.Add(user);
                 }
                 reader.Close();
@@ -86,12 +132,20 @@ namespace AMONIC_Airlines.Classes
                     conn.Close();
                     return users;
                 }
-            //}
-            //catch
-            //{
-            //    List<User> users = new List<User>();
-            //    return users;
-            //}
+        }
+
+        public void ChangeActive(User user)
+        {
+
+            string command = "USE Session1_12 " + $"EXEC [dbo].EditUser '{user.RoleID}','{user.Email}', '{user.Password}', '{user.FirstName}', '{user.LastName}', '{user.OfficeID}', '{user.Birthdate}', '{user.Active}', {user.ID}";
+            using (System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlCommand command1 = new SqlCommand(command, conn);
+                command1.ExecuteScalar();
+                conn.Close();
+            }
+
         }
 
         public User GetUsersForLogin(string UserLogin)
